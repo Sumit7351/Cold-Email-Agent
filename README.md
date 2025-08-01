@@ -1,70 +1,92 @@
-n8n Gemini Internship Email Agent
-An automated workflow designed to send personalized internship opportunity emails to a list of contacts stored in a Google Sheet, powered by Google Gemini.
+# 📧 Cold-Email-Agent
 
-🚀 Overview
-This project is a practical example of leveraging AI for automation. It uses the n8n workflow automation platform to connect to Google Sheets and a Gemini language model to generate unique, personalized emails. The goal is to streamline the process of reaching out for internship opportunities, making each message more effective and personal.
+An automated n8n workflow designed to send **personalized internship opportunity emails** to contacts stored in a Google Sheet, powered by **Google Gemini AI**.
+
+---
+
+## 🚀 Overview
+This project is a practical example of leveraging AI for **cold email automation**.  
+It uses the [n8n](https://n8n.io) workflow automation platform to:
+
+✅ Retrieve emails from a Google Sheet  
+✅ Generate unique, personalized internship emails using **Gemini LLM**  
+✅ Send the emails automatically via Gmail (or any SMTP email service)
 
 The workflow performs the following steps:
+1. **Manual Trigger** – Start the workflow manually.
+2. **Google Sheets Integration** – Fetch a list of email addresses.
+3. **Iterate Through Contacts** – Process each email one-by-one.
+4. **Gemini Email Generation** – Draft personalized internship inquiry emails.
+5. **Email Sending** – Send the AI-generated email via Gmail/SMTP.
 
-Triggers the automation manually.
+---
 
-Retrieves a list of emails from a Google Sheet.
+## ⚙️ How to Use
 
-Iterates through each email address individually.
+### 1️⃣ Download the Workflow
+Download the workflow file from this repository:  
+`cold-email-agent.json`
 
-Prompts the Gemini model to draft a unique email body for an internship inquiry.
+### 2️⃣ Set Up Your Google Sheet
+Create a Google Sheet with the following structure:
 
-Sends the AI-generated email to the contact using your configured email service.
+| Email                |
+|----------------------|
+| jane.doe@example.com |
+| john.smith@company.com |
 
-⚙️ How to Use
-1. Download the Workflow
-You can download the n8n workflow JSON file directly from this repository:
-internship-email-agent.json
+> **Note:** Ensure the column header is exactly `Email` in the first row.
 
-2. Set Up Your Google Sheet
-You will need a Google Sheet with a list of email addresses. The workflow is configured to read the following column (you can adjust this in the n8n workflow):
+### 3️⃣ Import and Configure the n8n Workflow
+1. **Import Workflow:**  
+   - Open your n8n instance.
+   - Go to **Workflows → New → ⋮ → Import from File** and upload `cold-email-agent.json`.
 
-Column Header
+2. **Configure Credentials:**  
+   - **Google Sheets:** Connect your Google Account.  
+   - **Google Gemini:** Add your Gemini API key.  
+   - **Email Sending:** Connect Gmail (via OAuth2) or any SMTP service.
 
-Example Content
+3. **Update Node Parameters:**  
+   - **Google Sheets Node:** Add your Google Sheet ID and sheet name.  
+   - **Gemini Node:** Adjust the prompt as needed. For example:
+     ```
+     You are an enthusiastic student applying for an internship. 
+     Write a brief, professional, and eager email expressing interest in an internship opportunity. 
+     End with 'Best regards, Sumit Singh Rana'.
+     ```
+   - **Email Node:** Verify `To` is set to `{{ $json.Email }}` and customize the subject line.
 
-Email
+---
 
-jane.doe@example.com
+## ▶️ Running the Workflow
+- Click **Execute Workflow** to test.
+- Check your email **Sent Folder** to verify messages are being delivered.
 
-Note: Ensure your sheet has this exact column header in the first row.
+---
 
-3. Import and Configure the n8n Workflow
-Import: In your n8n instance, go to "Workflows" and click "New". Then, use the three-dot menu to "Import from JSON" and upload the file you downloaded.
+## 💡 Learning Points from This Project
+- **Workflow Design:** How to chain trigger → data → AI → action in n8n.
+- **Dynamic Data Handling:** Pass data between nodes using variables and expressions.
+- **AI Integration:** Use Gemini as a dynamic part of automation pipelines.
+- **Prompt Engineering:** Craft prompts for high-quality, professional email output.
 
-Credentials: You will need to set up credentials for the following nodes:
+---
 
-Google Sheets: Connect your Google account.
+## 📌 Tech Stack
+- [n8n](https://n8n.io)
+- Google Sheets API
+- Google Gemini AI (LLM)
+- Gmail/SMTP
 
-Google Gemini: Connect your Google Gemini API key.
+---
 
-Email Send: Connect your email service (e.g., Gmail via SMTP).
+## 🛠️ Customization Ideas
+- Attach your resume automatically via Google Drive or local file.
+- Use company names from the sheet for even more personalized emails.
+- Add follow-up email logic for non-responses.
 
-Update Node Parameters:
+---
 
-Google Sheets: In the "Get Emails" node, provide your specific Sheet ID and Sheet Name.
-
-Gemini: In the "Basic LLM Chain" node, review the prompt. Since the sheet only contains emails, the prompt will need to be more generic. For example: "You are an enthusiastic student applying for an internship. Write a brief, professional, and eager email body to express interest in an internship opportunity. End with 'Best regards, [Your Name]'."
-
-Email Send: In the "Send Email" node, update the From Email field and verify that the To and Subject fields are correctly referencing the data from the previous nodes. The email address will be referenced as {{ $json.Email }}.
-
-4. Run the Workflow
-Once everything is configured, click the "Execute Workflow" button to run a test. You can check your email's sent folder to verify that the emails were drafted and sent correctly.
-
-💡 Learning Points from This Project
-This project is a great learning tool for anyone interested in automation and AI. By using this workflow, you can understand:
-
-Workflow Design: How to create a sequential flow of operations (trigger -> data source -> AI -> action).
-
-Dynamic Data Handling: Using expressions and variables to pass information between different services.
-
-AI Integration: How a language model can be a dynamic part of an automation pipeline, not just a standalone tool.
-
-Prompt Engineering: The importance of crafting a clear and specific prompt to get the desired output from an LLM.
-
-Feel free to fork this repository and adapt the workflow for your own needs!
+### 📜 License
+This project is for educational and personal use. Feel free to fork and modify for your needs!
