@@ -1,0 +1,161 @@
+{
+  "name": "cold agent",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "75d4abd5-2c45-47ca-a8fc-225ed417465e",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        620,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "sheetId": "1FYGGqG3DDNfpftv32gBWu55igbhoHv4GFUvpFdGTOE0",
+        "options": {}
+      },
+      "id": "0857967c-3c71-4b88-93d1-9605231aa989",
+      "name": "Get Emails",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        820,
+        -60
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "HEbxEzJoTbHWgHxG",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "subject": "Exploring Internship Opportunities - AI/ML, Cybersecurity",
+        "message": "Hi,  I hope you're doing well!  I'm Sumit Singh Rana, a B.Tech Computer Science student at Graphic Era Hill University, driven by a passion for Artificial Intelligence, Machine Learning, Cybersecurity, and Software Development.  \n\nI'm reaching out to explore potential internship or entry-level roles where I can apply my skills, contribute meaningfully, and continue growing in a dynamic team environment.\n\nSome of my recent technical projects include:  \n🧠 Real-time Sign Language Detection using YOLOv5  \n🔐 Safe Buddy – a secure data encryption and decryption application  \n⚙️ Pseudo-code to C Compiler built using Lex and Yacc \n These projects have helped me build a strong foundation in applied development, security, and compiler design.\n📄 Resume: https://drive.google.com/file/d/18oANUP6u-J-ciwrvQnhBgcwETire4PbT/view?usp=sharing \n🔗 LinkedIn: https://www.linkedin.com/in/sumit-singh-rana-b26946309  \n\nIf your team is hiring or looking for enthusiastic, self-driven individuals ready to contribute from day one, I’d love the opportunity to connect.  \nThank you for your time and consideration! \n\nBest regards,\nSumit Singh Rana \nsumitrana7351@gmail.com",
+        "toList": [
+          "={{ $json.Email }}"
+        ],
+        "additionalFields": {}
+      },
+      "id": "5509e519-9b9a-43e9-8727-3f057e168a95",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        -40
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "WcrORxnLMhQTE0z8",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "messages": {
+          "messageValues": [
+            {
+              "type": "AIMessagePromptTemplate",
+              "message": "Extract names from email and create personalized message for internship opprtunities"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        1020,
+        -40
+      ],
+      "id": "aa43c87f-877a-45fc-9c67-a7083b773267",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1000,
+        260
+      ],
+      "id": "083b247d-bbe7-4571-8fd4-91b0f3883def",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "W6QWM6VWRFuzNoWM",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Emails": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5ee4672f-e59e-401c-8d1d-9bbb1f43e7d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "653529300d0a429628f15fad0924ef5dbb7650e221498b0086a41f953b3a3b15"
+  },
+  "id": "dUMjyqB5Yi8MTZG1",
+  "tags": []
+}
